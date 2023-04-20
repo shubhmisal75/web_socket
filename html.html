@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Updated Data Example</title>
+  </head>
+  <body>
+    <h1>Updated Data Example</h1>
+    <h3>Stock ID :</h3>
+    <h4 id="stockId"></h4>
+    <h3>Stock Price :</h3>
+    <h4 id="test"></h4>
+    <div id="consoleOutput"></div>
+
+    <script>
+      // Create a new WebSocket connection
+      const socket = new WebSocket("ws://localhost:8080");
+
+      socket.addEventListener("open", (event) => {
+        console.log("connected to server");
+      });
+      // Handle incoming messages
+      socket.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+
+        const stockPrice = data.updateDescription.updatedFields.stock_price;
+        const stockId = data.documentKey._id;
+
+        const testElement1 = document.getElementById("stockId");
+        testElement1.innerText = stockId;
+        const testElement = document.getElementById("test");
+        testElement.innerText = stockPrice;
+
+        // Update the stockPriceField input with the latest value of the stock_price
+
+        // Check if the data is an array
+      });
+    </script>
+  </body>
+</html>
