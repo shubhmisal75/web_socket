@@ -19,10 +19,7 @@
     "mongoose": "^7.0.3",
     "nodemon": "^2.0.22",
     "random-token": "^0.0.8",
-    "redis": "^4.6.5",
     "socket.io": "^4.6.1",
-    "uniqid": "^5.4.0",
-    "unique-string": "^3.0.0",
     "ws": "^8.13.0"
   }
 }
