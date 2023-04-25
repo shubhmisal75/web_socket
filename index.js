@@ -1,9 +1,14 @@
 const express = require("express");
-var bodyParser = require("body-parser");
+const http = require("http");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const app = express();
 const WebSocket = require("ws");
 const { MongoClient } = require("mongodb");
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -22,20 +27,16 @@ mongoose
   .then(() => console.log("mongodb running"))
   .catch((err) => console.log(err));
 
-app.listen(3100, function () {
-  console.log("Express app running on port " + 3100);
-});
 app.use("", userRoute);
 app.use("", stockRoute);
-
 
 app.get("", (req, res) => {
   res.sendFile(__dirname + "/html.html");
 });
-//----------web socket server --------------------//
-const server = new WebSocket.Server({ port: 8080 });
-server.on("connection", (socket) => {
+
+wss.on("connection", (socket) => {
   console.log("Client connected");
+
   const client = new MongoClient(
     "mongodb+srv://shubham:shubhmisal75@cluster0.9ipafv0.mongodb.net/user",
     {
@@ -62,4 +63,8 @@ server.on("connection", (socket) => {
     console.log("Client disconnected");
     client.close();
   });
+});
+
+server.listen(process.env.PORT || 3100, () => {
+  console.log("Server started on port 3100");
 });
