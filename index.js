@@ -28,6 +28,10 @@ app.listen(3100, function () {
 app.use("", userRoute);
 app.use("", stockRoute);
 
+
+app.get("", (req, res) => {
+  res.sendFile(__dirname + "/html.html");
+});
 //----------web socket server --------------------//
 const server = new WebSocket.Server({ port: 8080 });
 server.on("connection", (socket) => {
