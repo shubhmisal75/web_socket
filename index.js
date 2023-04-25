@@ -59,10 +59,10 @@ wss.on("connection", (socket) => {
     socket.send(JSON.stringify(change));
   });
 
-  socket.on("close", () => {
-    console.log("Client disconnected");
-    client.close();
-  });
+//   socket.on("close", () => {
+//     console.log("Client disconnected");
+//     client.close();
+//   });
 });
 
 server.listen(process.env.PORT || 3100, () => {
