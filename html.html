@@ -24,12 +24,13 @@
 
         const stockPrice = data.updateDescription.updatedFields.stock_price;
         const stockId = data.documentKey._id;
+if(data.updateDescription &&data.documentKey._id ){
 
         const testElement1 = document.getElementById("stockId");
         testElement1.innerText = stockId;
         const testElement = document.getElementById("test");
         testElement.innerText = stockPrice;
-
+}
         // Update the stockPriceField input with the latest value of the stock_price
 
         // Check if the data is an array
