@@ -41,8 +41,6 @@ app.get("", (req, res) => {
 });
 
 // WebSocket server
-// const server = new WebSocket.Server({ port: 8080 });
-let db;
 wss.on("connection", async (socket, req) => {
   console.log("Client connected");
   if (!db) {
@@ -70,18 +68,14 @@ wss.on("connection", async (socket, req) => {
   });
 });
 
-//------------
+// Connect to MongoDB
+let db;
 mongoose
-  .connect(
-    "mongodb+srv://shubham:shubhmisal75@cluster0.9ipafv0.mongodb.net/user",
-    {
-      useNewUrlParser: true,
-    }
-  )
-  .then(() => console.log("mongodb running"))
+  .connect(MONGODB_URI, { useNewUrlParser: true })
+  .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
 const PORT = process.env.PORT || 3100;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
