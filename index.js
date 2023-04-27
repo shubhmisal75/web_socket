@@ -49,7 +49,7 @@ wss.on("connection", (socket) => {
   const stocks = db.collection("stocks");
 
   const changeStreamForUsers = user.watch();
-  const changeStreamForStocks = stocks.watch();
+  const changeStreamForStocks = stocks.watch({ fullDocument: "updateLookup" });
 
   changeStreamForUsers.on("change", (change) => {
     socket.send(JSON.stringify(change));
