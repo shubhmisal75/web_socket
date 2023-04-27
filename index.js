@@ -1,8 +1,12 @@
 const express = require("express");
+const http = require("http");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const WebSocket = require("ws");
 const { MongoClient } = require("mongodb");
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,10 +41,9 @@ app.get("", (req, res) => {
 });
 
 // WebSocket server
-const WebSocket = require("ws");
-const server = new WebSocket.Server({ port: 8080 });
+// const server = new WebSocket.Server({ port: 8080 });
 let db;
-server.on("connection", async (socket, req) => {
+wss.on("connection", async (socket, req) => {
   console.log("Client connected");
   if (!db) {
     db = await connectToMongoDB();
@@ -51,9 +54,9 @@ server.on("connection", async (socket, req) => {
   const changeStreamForUsers = user.watch();
   const changeStreamForStocks = stocks.watch({ fullDocument: "updateLookup" });
 
-    const allStocks = await stocks.find().toArray();
-    socket.send(JSON.stringify({ type: "all_stocks", data: allStocks }));
-    
+  const allStocks = await stocks.find().toArray();
+  socket.send(JSON.stringify({ type: "all_stocks", data: allStocks }));
+
   changeStreamForUsers.on("change", (change) => {
     socket.send(JSON.stringify(change));
   });
@@ -66,8 +69,6 @@ server.on("connection", async (socket, req) => {
     console.log("Client disconnected");
   });
 });
-
-
 
 //------------
 mongoose
